@@ -1,88 +1,154 @@
+"use strict";
+
 /**
- *	Binary Search Tree
+ *  Binary Search Tree Data structure
  */
-'use strict';
 
 var Bst = Bst || {};
 
 Bst.Node = function(k, data) {
+  this.data = data; // any
+  
   this.key = k; // integer
   this.parent = null; // Node
   this.left = null; // Node
   this.right = null; // Node
+};
 
-  this.data = data; // any
-}
+Bst.Tree = function() {
+  
+  var self = this;
+  
+  /* private vars */
+  var root = null; // root node
+  
+  /* public methods */
+  self.search = searchNode;
+  self.minimum = minimumNode;
+  self.maximum = maximumNode;
+  self.successor = successor;
+  self.predecessor = predecessor;
+  self.insert = insert;
+  self.remove = remove;
+  self.displayInorder = displayInorder;
+  self.displayTree = displayTree;
+  
+  /* Private methods */
+  /**
+   * 
+   */
+  function searchNode(k) {
+    return search(root, k);
+  }
+  
+  /**
+   * 
+   */
+  function search(node, k) {
+    if (node === null || node.key == k)
+      return node;
 
-Bst.BSTree = function() {
-  this.root = null; // root node
+    return search((node.key > k) ? node.left : node.right, k);
+  }
 
-  this.search = function(k) {
-    return search(this.root, k);
-  };
+  /**
+   * 
+   */
+  function minimumNode() {
+    return minimum(root);
+  }
+  
+  /**
+   * 
+   */
+  function minimum(n) {
+    var m = n;
+    while (m.left !== null) m = m.left;
+    return m;
+  }
 
-  this.minimum = function() {
-    return minimum(this.root);
-  };
+  /**
+   * 
+   */
+  function maximumNode() {
+    return maximum(root);
+  }
+  
+  /**
+   * 
+   */
+  function maximum(n) {
+    var m = n;
+    while (m.right !== null) m = m.right;
+    return m;
+  }
 
-  this.maximum = function() {
-    return maximum(this.root);
-  };
+  /**
+   * 
+   */
+  function successor(node) {
+    if (node.right !== null) return minimum(node.right);
 
-  this.successor = function(node) {
-    if (node.right != null) return minimum(node.right);
-
-    if (node.parent == null) return null;
+    if (node.parent === null) return null;
 
     var s = node.parent;
-    while (s != null && node == s.right) {
+    while (s !== null && node == s.right) {
       node = s;
       s = s.parent;
     }
     return s;
-  };
+  }
 
-  this.predecessor = function(node) {
-    if (node.left != null) return maximum(node.left);
+  /**
+   * 
+   */
+  function predecessor(node) {
+    if (node.left !== null) return maximum(node.left);
 
-    if (node.parent == null) return null;
+    if (node.parent === null) return null;
 
     var s = node.parent;
-    while (s != null && node == s.left) {
+    while (s !== null && node == s.left) {
       node = s;
       s = s.parent;
     }
     return s;
-  };
+  }
 
-  this.insert = function(node) {
+  /**
+   * 
+   */
+  function insert(node) {
     var y = null;
-    var r = this.root;
-    while (r != null) {
+    var r = root;
+    while (r !== null) {
       y = r;
       r = (node.key < r.key) ? r.left : r.right;
     }
     node.parent = y;
-    if (y == null)
-      this.root = node;
+    if (y === null)
+      root = node;
     else if (node.key < y.key)
       y.left = node;
     else
       y.right = node;
-  };
+  }
 
-  this.delete = function(node) {
-    if (node == null) return null;
+  /**
+   * 
+   */
+  function remove(node) {
+    if (node === null) return null;
 
-    var ny = (node.left == null || node.right == null) ? node : this.successor(node);
-    var nx = (ny.left != null) ? ny.left : ny.right;
+    var ny = (node.left === null || node.right === null) ? node : this.successor(node);
+    var nx = (ny.left !== null) ? ny.left : ny.right;
 
-    if (nx != null) {
+    if (nx !== null) {
       nx.parent = ny.parent;
     }
 
-    if (ny.parent == null) {
-      this.root = nx;
+    if (ny.parent === null) {
+      root = nx;
     } else {
       if (ny == ny.parent.left) {
         ny.parent.left = nx;
@@ -97,50 +163,42 @@ Bst.BSTree = function() {
     }
 
     return ny;
-  };
-
-  this.inorder = function() {
-    inorder(this.root);
-  };
-
-  this.display = function() {
-    display(this.root, 0);
-  };
-
-  /** Private methods */
-  function search(node, k) {
-    if (node == null || node.key == k)
-      return node;
-
-    return search((node.key > k) ? node.left : node.right, k);
   }
-
-  function minimum(n) {
-    var m = n;
-    while (m.left != null) m = m.left;
-    return m;
-  }
-
-  function maximum(n) {
-    var m = n;
-    while (m.right != null) m = m.right;
-    return m;
-  }
-
+  
+  /**
+   * 
+   */
   function inorder(node) {
-    if (node != null) {
+    if (node !== null) {
       inorder(node.left);
       console.info(node.key);
       inorder(node.right);
     }
   }
 
+  /**
+   * 
+   */
+  function displayInorder() {
+    inorder(root);
+  }
+
+  /**
+   * 
+   */
+  function displayTree() {
+    display(root, 0);
+  }
+  
+  /**
+   * 
+   */
   function display(node, indent) {
-    if (node != null) {
+    if (node !== null) {
       display(node.right, indent + 2);
       console.info(" ".repeat(indent), node.key);
       display(node.left, indent + 2);
     }
   }
   
-}
+};
