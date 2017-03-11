@@ -1,4 +1,6 @@
-"use strict";
+/*jslint devel: true */
+/*jslint node: true */
+"use strict"; 
 
 /**
  *	Linked List Data Structure
@@ -30,6 +32,7 @@ Ll.List = function() {
   self.findBy = findBy;
   
   /* Private methods */
+  
   /**
    * Executes a provided function once for each list element 
    * 
@@ -42,7 +45,7 @@ Ll.List = function() {
       callback(node);
       node = node.next;
     }
-  };
+  }
   
   /**
    * Insert newNode after node
@@ -53,7 +56,7 @@ Ll.List = function() {
   function insertAfter(node, newNode) {
     newNode.next = node;
     node.next = newNode;
-  };
+  }
   
   /**
    * Insert newNode at the begining of the list
@@ -63,7 +66,7 @@ Ll.List = function() {
   function insertFirst(newNode) {
     newNode.next = root;
     root = newNode;
-  };
+  }
   /**
    * Insert newNode at the end of the list
    * 
@@ -73,7 +76,7 @@ Ll.List = function() {
     self.forEach(function(node){
       if (node.next === null) node.next = newNode;
     });
-  };
+  }
   
   /**
    * Removes the first node and returns it;
@@ -83,7 +86,7 @@ Ll.List = function() {
     root = root.next;
     node.next = null;
     return node;
-  };
+  }
 
   /**
    * Retrieve a node by position in the list. 
@@ -100,7 +103,7 @@ Ll.List = function() {
       node = node.next; idx++;
     }
     return node;
-  };
+  }
   
   /**
    * Find a node by value. If the node holds objects use the property parameter to search by object property.
@@ -121,5 +124,5 @@ Ll.List = function() {
       node = node.next;
     }
     return node;
-  };
+  }
 };
