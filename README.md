@@ -4,7 +4,8 @@
 Sometimes called ordered or sorted binary trees, are a particular type of containers: data structures that store *items* (such as numbers, names etc.) in memory. 
 They allow fast lookup, addition and removal of items.
 Binary Search Trees can be used as dictionary or priorty queues.
-Source: [src/ads/bst.js] [BSTsrc]
+
+Source: [src/ads/binary-search-tree.js] [BSTsrc]
 
 ### Methods
 | Method | Example | 
@@ -20,7 +21,8 @@ Source: [src/ads/bst.js] [BSTsrc]
 ## Red-Black Trees (RBT)
 Red-Black trees are an improved version of the BST, with one extra bit of storage per node.
 Red-Black trees are aproximately balanced as they ensure that no path is more than twice as long as any other.
-Source: [src/ads/bst.js] [RBTsrc]
+
+Source: [src/ads/red-black-tree.js] [RBTsrc]
 
 ### Methods
 | Method | Example | 
@@ -49,5 +51,5 @@ B-Trees are a good example of a data structure for external memory. It is common
 
 [//]: # Reference links
 
-[BSTsrc]: <https://github.com/AndreiDMS/AdvancedDataStructures/blob/master/src/ads/bst.js>
-[RBTsrc]: <https://github.com/AndreiDMS/AdvancedDataStructures/blob/master/src/ads/rbt.js>
+[BSTsrc]: <https://github.com/AndreiDMS/AdvancedDataStructures/blob/master/src/ads/binary-search-tree.js>
+[RBTsrc]: <https://github.com/AndreiDMS/AdvancedDataStructures/blob/master/src/ads/red-black-tree.js>
