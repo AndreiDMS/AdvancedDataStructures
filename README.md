@@ -10,7 +10,7 @@ Source: [src/ads/bst.js] [BSTsrc]
 | Method | Example | 
 | ------ | ------- | 
 | insert | `bst.insert(new Bst.Node(1));` |
-| delete | `bst.delete(bst.search(1));` |
+| remove | `bst.remove(bst.search(1));` |
 | search | `bst.search(1);` |
 | minimum | `bst.minimum();` |
 | maximum | `bst.maximum();` |
@@ -31,7 +31,7 @@ Source: [src/ads/bst.js] [RBTsrc]
 | maximum | `rbt.maximum();` |
 | successor | `rbt.successor(rbt.search(1));` |
 | predecessor | `rbt.predecessor(rbt.search(1))` |
-| delete | `rbt.delete(rbt.search(1));` |
+| remove | `rbt.remove(rbt.search(1));` |
 
 ## B-Trees
 It's a self balancing tree data structure. It is a generalization of a BST in that a node can have more than 2 children.
