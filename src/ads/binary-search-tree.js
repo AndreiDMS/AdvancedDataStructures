@@ -1,4 +1,6 @@
-"use strict";
+/*jslint devel: true */
+/*jslint node: true */
+'use strict';
 
 /**
  *  Binary Search Tree Data structure
@@ -140,7 +142,7 @@ Bst.Tree = function() {
   function remove(node) {
     if (node === null) return null;
 
-    var ny = (node.left === null || node.right === null) ? node : this.successor(node);
+    var ny = (node.left === null || node.right === null) ? node : successor(node);
     var nx = (ny.left !== null) ? ny.left : ny.right;
 
     if (nx !== null) {
