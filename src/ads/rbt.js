@@ -1,42 +1,63 @@
+/*jslint devel: true */
+/*jslint node: true */
+'use strict';
+
 /**
  *	Red-Black Trees
  */
-'use strict';
 
 var Rbt = Rbt || {};
 
 Rbt.Color = {
   RED: 'R',
   BLACK: 'B'
-}
+};
 
 Rbt.Node = function(k, data) {
-  this.key = k; // integer
-  this.parent = (k == 0) ? this : Rbt.NULL; // Node
-  this.left = (k == 0) ? this : Rbt.NULL; // Node
-  this.right = (k == 0) ? this : Rbt.NULL; // Node
-  this.color = Rbt.Color.BLACK; // Rbt.Color.RED | Rbt.Color.BLACK
   this.data = data; // any
-}
+  
+  this.key = k; // integer
+  this.parent = (k === 0) ? this : Rbt.NULL; // Node
+  this.left = (k === 0) ? this : Rbt.NULL; // Node
+  this.right = (k === 0) ? this : Rbt.NULL; // Node
+  this.color = Rbt.Color.BLACK; // Rbt.Color.RED | Rbt.Color.BLACK
+};
 
 Rbt.NULL = new Rbt.Node(0);
 
-Rbt.RBTree = function() {
-  this.root = Rbt.NULL; // root node
+Rbt.Tree = function() {
+  
+  var self = this;
+  
+  /* private vars */
+  var root = Rbt.NULL; // root node
 
-  this.search = function(k) {
-    return search(this.root, k);
-  };
+  /* public methods */
+  self.search = searchNode;
+  self.minimum = minimumNode;
+  self.maximum = maximumNode;
+  self.successor = successor;
+  self.predecessor = predecessor;
+  self.insert = insert;
+  self.remove = remove;
+  self.inorderNodes = inorderNodes;
+  self.displayTree = displayTree;
+  
+  /* Private methods */
+  
+  function searchNode(k) {
+    return search(root, k);
+  }
 
-  this.minimum = function() {
-    return minimum(this.root);
-  };
+  function minimumNode() {
+    return minimum(root);
+  }
 
-  this.maximum = function() {
-    return maximum(this.root);
-  };
+  function maximumNode() {
+    return maximum(root);
+  }
 
-  this.successor = function(node) {
+  function successor(node) {
     if (node.right != Rbt.NULL) return minimum(node.right);
 
     if (node.parent == Rbt.NULL) return Rbt.NULL;
@@ -47,9 +68,9 @@ Rbt.RBTree = function() {
       s = s.parent;
     }
     return s;
-  };
+  }
 
-  this.predecessor = function(node) {
+  function predecessor(node) {
     if (node.left != Rbt.NULL) return maximum(node.left);
 
     if (node.parent == Rbt.NULL) return Rbt.NULL;
@@ -60,11 +81,11 @@ Rbt.RBTree = function() {
       s = s.parent;
     }
     return s;
-  };
+  }
 
-  this.insert = function(node) {
+  function insert(node) {
     var y = Rbt.NULL;
-    var r = this.root;
+    var r = root;
 
     while (r != Rbt.NULL) {
       y = r;
@@ -74,7 +95,7 @@ Rbt.RBTree = function() {
     node.parent = y;
 
     if (y == Rbt.NULL)
-      this.root = node;
+      root = node;
     else if (node.key < y.key)
       y.left = node;
     else
@@ -82,20 +103,20 @@ Rbt.RBTree = function() {
 
     node.left = node.right = Rbt.NULL;
     node.color = Rbt.Color.RED;
+    
+    insertFixup(node);
+  }
 
-    insertFixup.call(this, node);
-  };
-
-  this.delete = function(node) {
+  function remove(node) {
     if (node == Rbt.NULL) return Rbt.NULL;
 
-    var ny = (node.left == Rbt.NULL || node.right == Rbt.NULL) ? node : this.successor(node);
+    var ny = (node.left == Rbt.NULL || node.right == Rbt.NULL) ? node : successor(node);
     var nx = (ny.left != Rbt.NULL) ? ny.left : ny.right;
 
     nx.parent = ny.parent;
 
     if (ny.parent == Rbt.NULL) {
-      this.root = nx;
+      root = nx;
     } else {
       if (ny == ny.parent.left) {
         ny.parent.left = nx;
@@ -110,18 +131,20 @@ Rbt.RBTree = function() {
     }
 
     if (ny.color == Rbt.Color.BLACK)
-      deleteFixup.call(this, nx);
+      deleteFixup(nx);
 
     return ny;
-  };
+  }
 
-  this.inorder = function() {
-    inorder(this.root);
-  };
+  function inorderNodes() {
+    var nodes = [];
+    inorder(root, nodes);
+    return nodes;
+  }
 
-  this.display = function() {
-    display(this.root, 0);
-  };
+  function displayTree() {
+    display(root, 0);
+  }
 
   /** Private methods */
   function search(node, k) {
@@ -143,11 +166,11 @@ Rbt.RBTree = function() {
     return m;
   }
 
-  function inorder(node, vars) {
+  function inorder(node, nodes) {
     if (node != Rbt.NULL) {
-      inorder(node.left);
-      console.log(node.key);
-      inorder(node.right);
+      inorder(node.left, nodes);
+      nodes.push(node);
+      inorder(node.right, nodes);
     }
   }
 
@@ -168,7 +191,7 @@ Rbt.RBTree = function() {
 
     ny.parent = node.parent;
     if (node.parent == Rbt.NULL)
-      this.root = ny;
+      root = ny;
     else if (node == node.parent.left)
       node.parent.left = ny;
     else
@@ -187,7 +210,7 @@ Rbt.RBTree = function() {
 
     ny.parent = node.parent;
     if (node.parent == Rbt.NULL)
-      this.root = ny;
+      root = ny;
     else if (node == node.parent.left)
       node.parent.left = ny;
     else
@@ -210,11 +233,11 @@ Rbt.RBTree = function() {
         } else {
           if (node == node.parent.right) {
             node = node.parent;
-            leftRotate.call(this, node);
+            leftRotate(node);
           }
           node.parent.color = Rbt.Color.BLACK;
           node.parent.parent.color = Rbt.Color.RED;
-          rightRotate.call(this, node.parent.parent);
+          rightRotate(node.parent.parent);
         }
       } else {
         y = node.parent.parent.left;
@@ -226,26 +249,26 @@ Rbt.RBTree = function() {
         } else {
           if (node == node.parent.left) {
             node = node.parent;
-            rightRotate.call(this, node);
+            rightRotate(node);
           }
           node.parent.color = Rbt.Color.BLACK;
           node.parent.parent.color = Rbt.Color.RED;
-          leftRotate.call(this, node.parent.parent);
+          leftRotate(node.parent.parent);
         }
       }
     }
-    this.root.color = Rbt.Color.BLACK;
+    root.color = Rbt.Color.BLACK;
   }
 
   function deleteFixup(node) {
     var w;
-    while ((node != this.root) && (node.color == Rbt.Color.BLACK)) {
+    while ((node != root) && (node.color == Rbt.Color.BLACK)) {
       if (node == node.parent.left) {
         w = node.parent.right;
         if (w.color == Rbt.Color.RED) {
           w.color = Rbt.Color.BLACK;
           node.parent.color = Rbt.Color.RED;
-          leftRotate.call(this, node.parent);
+          leftRotate(node.parent);
           w = node.parent.right;
         }
         if ((w.left.color == Rbt.Color.BLACK) && (w.right.color == Rbt.Color.BLACK)) {
@@ -255,21 +278,21 @@ Rbt.RBTree = function() {
           if (w.right.color == Rbt.Color.BLACK) {
             w.left.color = Rbt.Color.BLACK;
             w.color = Rbt.Color.RED;
-            rightRotate.call(this, w);
+            rightRotate(w);
             w = node.parent.right;
           }
           w.color = node.parent.color;
           node.parent.color = Rbt.Color.BLACK;
           w.right.color = Rbt.Color.BLACK;
-          leftRotate.call(this, node.parent);
-          node = this.root;
+          leftRotate(node.parent);
+          node = root;
         }
       } else {
         w = node.parent.left;
         if (w.color == Rbt.Color.RED) {
           w.color = Rbt.Color.BLACK;
           node.parent.color = Rbt.Color.RED;
-          rightRotate.call(this, node.parent);
+          rightRotate(node.parent);
           w = node.parent.left;
         }
         if ((w.left.color == Rbt.Color.BLACK) && (w.right.color == Rbt.Color.BLACK)) {
@@ -279,18 +302,17 @@ Rbt.RBTree = function() {
           if (w.left.color == Rbt.Color.BLACK) {
             w.right.color = Rbt.Color.BLACK;
             w.color = Rbt.Color.RED;
-            LeftRotate(w);
+            leftRotate(w);
             w = node.parent.left;
           }
           w.color = node.parent.color;
           node.parent.color = Rbt.Color.BLACK;
           w.left.color = Rbt.Color.BLACK;
-          rightRotate.call(this, node.parent);
-          node = this.root;
+          rightRotate(node.parent);
+          node = root;
         }
       }
     }
     node.color = Rbt.Color.BLACK;
   }
-
-}
+};
