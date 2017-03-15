@@ -5,7 +5,6 @@
 /**
  *  Binary Search Tree Data structure
  */
-
 var Bst = Bst || {};
 
 Bst.Node = function(k, data) {
@@ -21,9 +20,6 @@ Bst.Tree = function() {
   
   var self = this;
   
-  /* private vars */
-  var root = null; // root node
-  
   /* public methods */
   self.search = searchNode;
   self.minimum = minimumNode;
@@ -32,61 +28,64 @@ Bst.Tree = function() {
   self.predecessor = predecessor;
   self.insert = insert;
   self.remove = remove;
+  self.inorder = inorder;
   self.displayInorder = displayInorder;
   self.displayTree = displayTree;
   
-  /* Private methods */
+  /* private vars */
+  var root = null; // root node
+  
   /**
-   * 
+   * Search a node by key
    */
-  function searchNode(k) {
-    return search(root, k);
+  function searchNode(key) {
+    return search(root, key);
   }
   
   /**
-   * 
+   * Recursive search a node by key
    */
-  function search(node, k) {
-    if (node === null || node.key == k)
+  function search(node, key) {
+    if (node === null || node.key == key)
       return node;
 
-    return search((node.key > k) ? node.left : node.right, k);
+    return search((node.key > key) ? node.left : node.right, key);
   }
 
   /**
-   * 
+   * Retrieve the tree node with the minimum key
    */
   function minimumNode() {
     return minimum(root);
   }
   
   /**
-   * 
+   * Return the leftmost child of a node
    */
-  function minimum(n) {
-    var m = n;
-    while (m.left !== null) m = m.left;
-    return m;
+  function minimum(node) {
+    var n = node;
+    while (n.left !== null) n = n.left;
+    return n;
   }
 
   /**
-   * 
+   * Retrieve the tree node with the maximum key
    */
   function maximumNode() {
     return maximum(root);
   }
   
   /**
-   * 
+   * Return the rightmost child of a node
    */
-  function maximum(n) {
-    var m = n;
-    while (m.right !== null) m = m.right;
-    return m;
+  function maximum(node) {
+    var n = node;
+    while (n.right !== null) n = n.right;
+    return n;
   }
 
   /**
-   * 
+   * Retrieve the successor of a given node by its key
    */
   function successor(node) {
     if (node.right !== null) return minimum(node.right);
@@ -102,23 +101,23 @@ Bst.Tree = function() {
   }
 
   /**
-   * 
+   * Retrieve the predecessor of a given node by its key
    */
   function predecessor(node) {
     if (node.left !== null) return maximum(node.left);
 
     if (node.parent === null) return null;
 
-    var s = node.parent;
-    while (s !== null && node == s.left) {
-      node = s;
-      s = s.parent;
+    var p = node.parent;
+    while (p !== null && node == p.left) {
+      node = p;
+      p = p.parent;
     }
-    return s;
+    return p;
   }
 
   /**
-   * 
+   * Insert a new node
    */
   function insert(node) {
     var y = null;
@@ -137,7 +136,7 @@ Bst.Tree = function() {
   }
 
   /**
-   * 
+   * Remove a node
    */
   function remove(node) {
     if (node === null) return null;
@@ -168,25 +167,29 @@ Bst.Tree = function() {
   }
   
   /**
-   * 
+   * Executes a provided function for each tree element, sorted by key
    */
-  function inorder(node) {
+  function inorder(node, callback) {
     if (node !== null) {
-      inorder(node.left);
-      console.info(node.key);
-      inorder(node.right);
+      inorder(node.left, callback);
+      if (typeof callback === 'function') callback(node);
+      inorder(node.right, callback);
     }
   }
 
   /**
-   * 
+   * Display the sorted keys of the tree
    */
   function displayInorder() {
-    inorder(root);
+	var s = [];
+    inorder(root, function(node){
+    	s.push(node.key);
+    });
+    console.info(s.join(', '));
   }
 
   /**
-   * 
+   * Display the tree structure with indentation
    */
   function displayTree() {
     display(root, 0);

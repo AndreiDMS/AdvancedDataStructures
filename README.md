@@ -1,22 +1,45 @@
 # Advanced Data Structures
 
 ## Binary Search Trees (BST)
+
 Sometimes called ordered or sorted binary trees, are a particular type of containers: data structures that store *items* (such as numbers, names etc.) in memory. 
+A binary search tree is organized as a binary tree. We can represent such tree by a linked data structure in which each node is an object with the following attributes: in addition to a *key* and satelite *data*, each node contains *parent*, *left* and *right* attributes that point to nodes coresponding to its parent, its left child and its right child, respectively.
+If one of these links are missing the attribute is set to NULL. The root is the only noed in the tree with a NULL parent.
 They allow fast lookup, addition and removal of items.
 Binary Search Trees can be used as dictionary or priorty queues.
 
 Source: [src/ads/binary-search-tree.js] [BSTsrc]
 
-### Methods
-| Method | Example | 
-| ------ | ------- | 
-| insert | `bst.insert(new Bst.Node(1));` |
-| remove | `bst.remove(bst.search(1));` |
-| search | `bst.search(1);` |
-| minimum | `bst.minimum();` |
-| maximum | `bst.maximum();` |
-| successor | `bst.successor(bst.search(1));` |
-| predecessor | `bst.predecessor(bst.search(1))` |
+#### Usage
+```javascript
+// create a bst tree
+var bst = new Bst.tree();
+
+// create a new node. key is a number representing the node key, data is the satelite data
+var node = new Bst.Node(key, data);
+
+// insert the node
+bst.insert(new Bst.Node(1));
+
+// retrieve the node with minimum key
+var minNode = bst.minimum();
+
+// retrieve the node with maximum key
+var maxKey = bst.maximum();
+
+// retrieve the predecessor of a given node
+var pred = bst.predecessor(node);
+
+// retrieve the successor of a given node
+var succ = bst.successor(node);
+
+// search a node by key
+var node = bst.search(1);
+
+// remove a node
+bst.remove(node);
+
+```
 
 ## Red-Black Trees (RBT)
 Red-Black trees are an improved version of the BST, with one extra bit of storage per node.
@@ -49,7 +72,7 @@ B-Trees are a good example of a data structure for external memory. It is common
 
 ## String Matching
 
-[//]: # Reference links
+[]: #
 
 [BSTsrc]: <https://github.com/AndreiDMS/AdvancedDataStructures/blob/master/src/ads/binary-search-tree.js>
 [RBTsrc]: <https://github.com/AndreiDMS/AdvancedDataStructures/blob/master/src/ads/red-black-tree.js>
